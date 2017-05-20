@@ -1,0 +1,190 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:textColor="#000000"
+        android:text="@string/dummy_short"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/address_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/address_label"
+        android:textStyle="bold"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/address_label"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/dummy_long"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/status_label"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/address"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/status_label"
+        android:textStyle="bold"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/status_label"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/dummy_short"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/last_update"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/dummy_short"
+        android:gravity="center"
+        android:lines="1"
+        android:textSize="12sp" />
+
+    <View
+        android:id="@+id/anchor"
+        android:layout_centerInParent="true"
+        android:layout_width="0dp"
+        android:layout_height="0dp" />
+
+    <LinearLayout
+        android:id="@+id/layout_stands_available"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/last_update"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/anchor"
+        android:layout_toEndOf="@id/anchor"
+        android:orientation="horizontal"
+        android:background="@drawable/background_rounded_purple"
+        android:layout_margin="2dp"
+        android:gravity="center_vertical" >
+
+        <TextView
+            android:id="@+id/available_stands"
+            android:layout_margin="3dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:textColor="@color/purple_parking"
+            android:text="@string/dummy_number" />
+
+        <ImageView
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_rounded_purple_full"
+            android:src="@drawable/ic_local_parking"
+            android:contentDescription="@string/bike_stands_availables_content_desc" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_bike_available"
+        android:layout_above="@id/last_update"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@id/anchor"
+        android:layout_toStartOf="@id/anchor"
+        android:layout_margin="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/background_rounded_blue"
+        android:gravity="center_vertical" >
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/background_rounded_blue_full"
+            android:src="@drawable/ic_directions_bike"
+            android:contentDescription="@string/bike_availables_content_desc" />
+
+        <TextView
+            android:id="@+id/available_bikes"
+            android:layout_margin="1dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue_bike"
+            android:text="@string/dummy_number" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/test"
+        android:layout_above="@id/layout_bike_available"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@id/anchor"
+        android:layout_toStartOf="@id/anchor"
+        android:layout_margin="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        style="@android:style/Widget.Button"
+        android:background="@drawable/background_rounded_blue"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/background_rounded_blue_full"
+            android:src="@drawable/ic_pin_drop"
+            android:contentDescription="@string/bike_availables_content_desc" />
+
+        <TextView
+            android:id="@+id/test2"
+            android:layout_margin="3dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue_bike"
+            android:text="@string/dummy_short" />
+
+    </LinearLayout>
+
+</RelativeLayout>

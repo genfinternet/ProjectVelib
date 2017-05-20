@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Project Velib</string>
+    <string name="company_name">The Akatastroph\'</string>
+    <string name="dummy_number">42</string>
+    <string name="dummy_short">Dummy</string>
+    <string name="dummy">Dummy Text</string>
+    <string name="dummy_long">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sollicitudin molestie sapien, ut semper neque condimentum id. Proin sit amet elit suscipit magna laoreet bibendum varius in ex.</string>
+    <string name="hint_station_search">Search a station or address</string>
+    <string name="back_button">Back</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bike_stands_availables_content_desc">Bike stands availables</string>
+    <string name="bike_availables_content_desc">Bike availables</string>
+    <string name="dialog_message">If you want us to display station near you on the map when you open the app, please press allow on the next pop-up</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_permission_denied">You can change that later in the app settings</string>
+    <string name="address_label">Address</string>
+    <string name="last_update">Last update on %1$s at %2$s</string>
+    <string name="status_label">Status</string>
+    <string name="station_close">CLOSED</string>
+    <string name="station_open">OPEN</string>
+</resources>
