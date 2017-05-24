@@ -1,9 +1,11 @@
 package com.akatastroph.projectvelib.view.recyclerview.viewholder;
 
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.akatastroph.projectvelib.R;
@@ -21,6 +23,7 @@ public class StationViewHolder extends BaseViewHolder<Station> {
     @BindView(R.id.available_bikes) protected TextView mAvailableBikesView;
     @BindView(R.id.available_stands) protected TextView mAvailableStandsView;
     @BindView(R.id.card_view) protected CardView mCardView;
+    @BindView(R.id.status_circle) protected ImageView mStatus;
 
     public StationViewHolder(View itemView, OnViewHolderClick listener, boolean shouldBind) {
         super(itemView, listener, shouldBind);
@@ -31,12 +34,7 @@ public class StationViewHolder extends BaseViewHolder<Station> {
         mAddressView.setText(mItem.getAddress());
         mAvailableBikesView.setText(String.valueOf(mItem.getAvailableBike()));
         mAvailableStandsView.setText(String.valueOf(mItem.getAvailableBikeStands()));
-        mCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        mStatus.setImageDrawable(ResourcesCompat.getDrawable(itemView.getResources(), mItem.isOpen() ? R.drawable.ic_circle_green : R.drawable.ic_circle_red, null));
     }
 
     public static StationViewHolder onCreateView(ViewGroup parent, OnViewHolderClick listerner) {

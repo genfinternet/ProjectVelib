@@ -1,5 +1,8 @@
 package com.akatastroph.projectvelib.fragment;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
@@ -7,16 +10,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.akatastroph.projectvelib.AkatastrophApplication;
 import com.akatastroph.projectvelib.R;
 import com.akatastroph.projectvelib.manager.DataManager;
 import com.akatastroph.projectvelib.model.Station;
 
+import java.util.Locale;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class StationDetailsFragment extends Fragment {
     private static final String STATION_ARG = "STATION_ARG";
@@ -38,6 +45,34 @@ public class StationDetailsFragment extends Fragment {
         args.putParcelable(STATION_ARG, station);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @OnClick(R.id.show_map)
+    public void showMap() {
+        Toast.makeText(getContext(), "test show map", Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.show_directions)
+    public void showDirections() {
+        String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=%f,%f", mStation.getPosition().latitude, mStation.getPosition().longitude);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        intent.setPackage("com.google.android.apps.maps");
+        try
+        {
+            startActivity(intent);
+        }
+        catch(ActivityNotFoundException ex)
+        {
+            try
+            {
+                Intent unrestrictedIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                startActivity(unrestrictedIntent);
+            }
+            catch(ActivityNotFoundException innerEx)
+            {
+                Toast.makeText(getContext(), "Please install a maps application", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Override

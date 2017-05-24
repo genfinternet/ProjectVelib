@@ -1,8 +1,6 @@
 package com.akatastroph.projectvelib;
 
 import android.app.Application;
-import android.content.pm.PackageManager;
-import android.util.Log;
 
 import com.akatastroph.projectvelib.di.AkatastrophComponent;
 import com.akatastroph.projectvelib.di.DaggerAkatastrophComponent;
@@ -33,11 +31,6 @@ public class AkatastrophApplication extends Application {
                 .build();
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
-            try {
-                Log.i("TEST", "" + getPackageManager().getPackageInfo("com.google.android.gms", 0 ).versionCode);
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.i("TEST", "Not found");
-            }
         }
     }
 

@@ -164,14 +164,7 @@ public class Station implements SortedListModel<Station>, Parcelable {
         mPosition = in.readParcelable(LatLng.class.getClassLoader());
         mBanking = (in.readInt() == 1);
         mBonus = (in.readInt() == 1);
-        switch (in.readInt()) {
-            case 0:
-                mStatus = Status.CLOSED;
-                break;
-            case 1:
-                mStatus = Status.OPEN;
-                break;
-        }
+        mStatus = (in.readInt() == 1 ? Status.OPEN : Status.CLOSED);
         mBikeStands = in.readInt();
         mAvailableBikeStands = in.readInt();
         mAvailableBike = in.readInt();

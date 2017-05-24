@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer
-        name="splashscreen_logo_animation_duration"
-        >1000</integer>
-    <integer
-        name="splashscreen_text_animation_duration"
-        >850</integer>
-    <integer
-        name="activity_transition_duration"
-        >500</integer>
+    <integer name="splashscreen_logo_animation_duration">1000</integer>
+    <integer name="splashscreen_text_animation_duration">850</integer>
+    <integer name="activity_transition_duration">500</integer>
+    <integer name="refresh_button_rotation_duration">750</integer>
 </resources>

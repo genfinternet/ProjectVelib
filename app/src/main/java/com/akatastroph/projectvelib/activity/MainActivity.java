@@ -4,21 +4,36 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 
 import com.akatastroph.projectvelib.AkatastrophApplication;
 import com.akatastroph.projectvelib.R;
 import com.akatastroph.projectvelib.manager.DataManager;
 import com.akatastroph.projectvelib.model.Station;
 import com.akatastroph.projectvelib.utils.Tools;
+import com.akatastroph.projectvelib.utils.events.Event;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -34,6 +49,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,23 +63,33 @@ import butterknife.OnFocusChange;
 
 import static com.akatastroph.projectvelib.R.id.map;
 
-/**
- * Created by genfinternet on 01/02/2017.
- */
-
-public class MainActivity extends BaseActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnCameraIdleListener, DataManager.DataStateListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraMoveListener {
+public class MainActivity extends BaseActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnCameraMoveListener {
     @Inject protected DataManager mDataManager;
+
     @BindView(map) protected MapView mMapView;
     @BindView(R.id.floatingActionButton) protected FloatingActionButton mFab;
+    @BindView(R.id.toolbar) protected Toolbar mToolbar;
+
+    @BindView(R.id.mode_bike_textview) protected TextView mBikeTextView;
+    @BindView(R.id.mode_stand_textview) protected TextView mStandTextView;
+    @BindView(R.id.mode_bike_layout) protected CardView mBikeLayout;
+    @BindView(R.id.mode_stand_layout) protected CardView mStandLayout;
+    private boolean mBikeMode;
+
     private GoogleApiClient mGoogleApiClient;
     private GoogleMap mGmap;
     private Circle mCircle;
-    private ArrayList<Marker> mMarkers;
+    private ArrayList<Marker> mMarkersBikes;
+    private ArrayList<Marker> mMarkersStands;
+
+    private Animation mRotateAnimation;
+    private MenuItem mMenuItem;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMarkers = new ArrayList<>();
+        mMarkersBikes = new ArrayList<>();
+        mMarkersStands = new ArrayList<>();
         AkatastrophApplication.getInstance().getAkatastrophComponent().inject(this);
         setContentView(R.layout.activity_main);
         if (mGoogleApiClient == null) {
@@ -71,16 +99,95 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
                     .addApi(LocationServices.API)
                     .build();
         }
+        initMap(savedInstanceState);
+        initToolbar();
+        initUI();
+    }
+
+    private void initMap(Bundle savedInstanceState) {
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
-
-
         try {
             MapsInitializer.initialize(getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
         mMapView.getMapAsync(this);
+    }
+
+    private void initToolbar() {
+        setSupportActionBar(mToolbar);
+    }
+
+    private void initUI() {
+        mBikeMode = true;
+        updateCardColor();
+        mRotateAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.refresh_menu, menu);
+        return true;
+    }
+
+    @OnClick(R.id.mode_bike_layout)
+    public void OnBikeModeClick() {
+        if (mBikeMode) {
+            return;
+        }
+        mBikeMode = true;
+        updateCardColor();
+        for (Marker marker : mMarkersStands) {
+            marker.setVisible(false);
+        }
+        onCameraIdle();
+    }
+
+    @OnClick(R.id.mode_stand_layout)
+    public void OnStandModeClick() {
+        if (!mBikeMode) {
+            return;
+        }
+        mBikeMode = false;
+        updateCardColor();
+        for (Marker marker : mMarkersBikes) {
+            marker.setVisible(false);
+        }
+        onCameraIdle();
+    }
+
+    private void updateCardColor() {
+        int white = ResourcesCompat.getColor(getResources(), R.color.white, null);
+        if (mBikeMode) {
+            int blue = ResourcesCompat.getColor(getResources(), R.color.blue_bike, null);
+            mBikeLayout.setCardBackgroundColor(blue);
+            mStandLayout.setCardBackgroundColor(white);
+            mBikeTextView.setTextColor(white);
+            mStandTextView.setTextColor(blue);
+            setTextViewDrawableColor(mBikeTextView, R.drawable.ic_bike_colored, white);
+            setTextViewDrawableColor(mStandTextView, R.drawable.ic_stands_colored, blue);
+            mFab.setColorFilter(blue, PorterDuff.Mode.SRC_ATOP);
+        } else {
+            int purple = ResourcesCompat.getColor(getResources(), R.color.purple_parking, null);
+            mBikeLayout.setCardBackgroundColor(white);
+            mStandLayout.setCardBackgroundColor(purple);
+            mBikeTextView.setTextColor(purple);
+            mStandTextView.setTextColor(white);
+            setTextViewDrawableColor(mBikeTextView, R.drawable.ic_bike_colored, purple);
+            setTextViewDrawableColor(mStandTextView, R.drawable.ic_stands_colored, white);
+            mFab.setColorFilter(purple, PorterDuff.Mode.SRC_ATOP);
+        }
+    }
+
+    private void setTextViewDrawableColor(TextView textView, @DrawableRes int idDrawable, @ColorInt int color) {
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), idDrawable, null);
+        if (drawable != null) {
+            drawable.mutate();
+            drawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        }
+        textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
     }
 
     @OnFocusChange(R.id.search_station)
@@ -106,7 +213,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
         googleMap.setOnCameraMoveListener(this);
         googleMap.setOnMarkerClickListener(this);
         googleMap.getUiSettings().setMyLocationButtonEnabled(false);
-        mDataManager.getStationsAsync(this);
+        mDataManager.refresh();
     }
 
     public void ZoomToPosition() {
@@ -125,12 +232,11 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
                     location = l;
                 }
             }
-            if (location != null)
-            {
+            if (location != null) {
                 LatLng currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
                 CameraPosition cameraPosition = new CameraPosition.Builder()
                         .target(currentPosition)      // Sets the center of the map to location user
-                        .zoom(16)                   // Sets the zoom
+                        .zoom(15)                   // Sets the zoom
                         .bearing(0)                // Sets the orientation of the camera to north
                         .tilt(0)                   // Sets the tilt of the camera to 0 degrees
                         .build();                   // Creates a CameraPosition from the builder
@@ -175,15 +281,22 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
         }
         CircleOptions circleOptions = new CircleOptions()
                 .center(currentPosition)
-                .strokeColor(ResourcesCompat.getColor(getResources(), R.color.blue_bike, null))
+                .strokeColor(ResourcesCompat.getColor(getResources(), mBikeMode ? R.color.blue_bike : R.color.purple_parking, null))
                 .radius(500);
         mCircle = mGmap.addCircle(circleOptions);
     }
 
     private void updateMarker(LatLng currentPosition) {
-        for (Marker marker : mMarkers) {
-            boolean showMarker = (calculationByDistance(marker.getPosition(), currentPosition) < 500);
-            marker.setVisible(showMarker);
+        if (mBikeMode) {
+            for (Marker marker : mMarkersBikes) {
+                boolean showMarker = (calculationByDistance(marker.getPosition(), currentPosition) < 500);
+                marker.setVisible(showMarker);
+            }
+        } else {
+            for (Marker marker : mMarkersStands) {
+                boolean showMarker = (calculationByDistance(marker.getPosition(), currentPosition) < 500);
+                marker.setVisible(showMarker);
+            }
         }
     }
 
@@ -198,14 +311,85 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
     }
 
     @Override
-    public void onDataReady(final ArrayList<Station> stations) {
-        for (Station station : stations) {
-            mMarkers.add(mGmap.addMarker(new MarkerOptions()
-                    .position(station.getPosition())
-                    .visible(true)
-                    .icon(Tools.makeBitmap(MainActivity.this, "" + station.getAvailableBike()))//, R.drawable.ic_pin_drop))
-                    .title(station.getName().substring(station.getName().indexOf("-") + 1).trim())));
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.about_us_menu:
+                Intent intent = new Intent(this, AboutUsActivity.class);
+                ContextCompat.startActivity(this, intent, null);
+                overridePendingTransition(R.anim.slide_in, R.anim.stay);
+                return true;
+            case R.id.refresh_menu:
+                refresh(menuItem);
+                return true;
         }
+        return super.onOptionsItemSelected(menuItem);
+    }
+
+    private void refresh(final MenuItem menuItem) {
+        menuItem.setActionView(R.layout.actionbar_refresh);
+        menuItem.getActionView().startAnimation(mRotateAnimation);
+        mMenuItem = menuItem;
+        mDataManager.refresh();
+        for (Marker marker : mMarkersBikes) {
+            marker.remove();
+        }
+        for (Marker marker : mMarkersStands) {
+            marker.remove();
+        }
+        mMarkersBikes.clear();
+        mMarkersStands.clear();
+    }
+
+    @Subscribe
+    public void onDataChanged(final Event.StationListUpdatedEvent event) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                final List<MarkerOptions> bikeMarkerOptions = new ArrayList<>();
+                final List<MarkerOptions> standMarkerOptions = new ArrayList<>();
+                for (Station station : event.getStations()) {
+                    bikeMarkerOptions.add(new MarkerOptions()
+                            .position(station.getPosition())
+                            .visible(false)
+                            .icon(Tools.makeBitmap(MainActivity.this, R.color.blue_bike, R.drawable.ic_pin_full, "" + station.getAvailableBike()))
+                            .title(station.getName().substring(station.getName().indexOf("-") + 1).trim()));
+                    standMarkerOptions.add(new MarkerOptions()
+                            .position(station.getPosition())
+                            .visible(false)
+                            .icon(Tools.makeBitmap(MainActivity.this, R.color.purple_parking, R.drawable.ic_pin_full, "" + station.getAvailableBikeStands()))
+                            .title(station.getName().substring(station.getName().indexOf("-") + 1).trim()));
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (MarkerOptions options : bikeMarkerOptions) {
+                            mMarkersBikes.add(mGmap.addMarker(options));
+                        }
+                        for (MarkerOptions options : standMarkerOptions) {
+                            mMarkersStands.add(mGmap.addMarker(options));
+                        }
+                        onCameraIdle();
+                        if (mMenuItem != null) {
+                            mMenuItem.getActionView().clearAnimation();
+                            mMenuItem.setActionView(null);
+                            mMenuItem = null;
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override

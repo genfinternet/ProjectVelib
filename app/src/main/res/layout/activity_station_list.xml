@@ -5,20 +5,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/card_view"
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        card_view:cardCornerRadius="3dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            card_view:cardCornerRadius="3dp">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="0dp"
-                android:background="@android:color/transparent">
+            android:background="@android:color/transparent"
+            android:padding="0dp">
 
 
             <LinearLayout
@@ -32,8 +32,8 @@
                 <EditText
                     android:id="@+id/search_station"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:hint="@string/hint_station_search"
                     android:imeOptions="actionDone"
@@ -45,25 +45,22 @@
                     android:textCursorDrawable="@drawable/cursor_blue"
                     android:textSize="14sp" />
 
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/back_button"
-                    android:src="@drawable/ic_info"
-                    android:tint="@android:color/darker_gray" />
-
             </LinearLayout>
 
         </android.support.v7.widget.Toolbar>
 
-        </android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_stations"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/station_item">
+        android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_stations"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/station_item" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

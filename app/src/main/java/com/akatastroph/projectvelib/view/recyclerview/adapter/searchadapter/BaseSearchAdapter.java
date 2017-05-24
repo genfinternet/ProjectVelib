@@ -33,6 +33,9 @@ public abstract class BaseSearchAdapter<T extends SortedListModel<T>, VH extends
     }
 
     public BaseSearchAdapter(List<T> items, Class<T> klass, Comparator<T> comparator, OnItemClickListener listener, boolean loading) {
+        this.mLoading = loading;
+        this.mComparator = comparator;
+        this.mListener = listener;
         this.mItems = new SortedList<>(klass, new SortedList.Callback<T>() {
             @Override
             public int compare(T a, T b) {
@@ -69,11 +72,8 @@ public abstract class BaseSearchAdapter<T extends SortedListModel<T>, VH extends
                 return item1.isTheSameItem(item2);
             }
         });
-        this.mLoading = loading;
         this.mItems.clear();
         this.mItems.addAll(items);
-        this.mComparator = comparator;
-        this.mListener = listener;
     }
 
 
@@ -116,6 +116,7 @@ public abstract class BaseSearchAdapter<T extends SortedListModel<T>, VH extends
 
     public void setLoading(boolean loading) {
         mLoading = loading;
+        notifyDataSetChanged();
     }
 
     public void replaceAll(List<T> models) {

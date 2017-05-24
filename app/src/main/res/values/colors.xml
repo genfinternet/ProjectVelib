@@ -5,13 +5,14 @@
     <color name="colorAccent">#3dc5e3</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
 
     <color name="transparent_grey">#AA000000</color>
     <color name="other_blue">#0e75fc</color>
     <color name="blue_bike">#3dc5e3</color>
     <color name="purple_parking">#9f3ca4</color>
     <color name="dark_gray">#444444</color>
-    <color name="light_gray">#ffffff</color>
-
+    <color name="light_gray">#CCCCCC</color>
+    <color name="gray">@android:color/darker_gray</color>
 
 </resources>

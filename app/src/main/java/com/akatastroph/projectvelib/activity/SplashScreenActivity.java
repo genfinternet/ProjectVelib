@@ -87,15 +87,13 @@ public class SplashScreenActivity extends BaseActivity {
     }
 
     private void startNextActivity() {
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
-//        if (mUserPreferences.isFirstStart()) {
-//            Toast.makeText(this, "First Start", Toast.LENGTH_SHORT).show();
-//            mUserPreferences.completeFirstStart();
-//        } else {
-//            startActivity(new Intent(this, MainActivity.class));
-//            finish();
-//        }
+        if (mUserPreferences.isFirstStart()) {
+            startActivity(new Intent(this, OnBoardingActivity.class));
+            finish();
+        } else {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
     }
 
     private void checkPermission() {

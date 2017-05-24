@@ -1,14 +1,15 @@
 package com.akatastroph.projectvelib.di;
 
 import com.akatastroph.projectvelib.activity.MainActivity;
+import com.akatastroph.projectvelib.activity.OnBoardingActivity;
 import com.akatastroph.projectvelib.activity.SplashScreenActivity;
 import com.akatastroph.projectvelib.activity.StationDetailActivity;
 import com.akatastroph.projectvelib.activity.StationListActivity;
 import com.akatastroph.projectvelib.di.module.AkatastrophModule;
 import com.akatastroph.projectvelib.di.module.AppModule;
 import com.akatastroph.projectvelib.di.module.NetModule;
+import com.akatastroph.projectvelib.fragment.OnBoardingFragment;
 import com.akatastroph.projectvelib.fragment.StationDetailsFragment;
-import com.akatastroph.projectvelib.manager.DataManager;
 
 import javax.inject.Singleton;
 
@@ -25,6 +26,7 @@ public interface AkatastrophComponent {
     void inject(MainActivity mainActivity);
     void inject(StationListActivity stationListActivity);
     void inject(StationDetailActivity stationDetailActivity);
-    void inject(DataManager dataManager);
     void inject(StationDetailsFragment stationDetailsFragment);
+    void inject(OnBoardingActivity onBoardingActivity);
+    void inject(OnBoardingFragment onBoardingFragment);
 }

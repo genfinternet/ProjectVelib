@@ -20,4 +20,13 @@
     <string name="status_label">Status</string>
     <string name="station_close">CLOSED</string>
     <string name="station_open">OPEN</string>
+    <string name="bikes_main">BIKES</string>
+    <string name="stands_main">STANDS</string>
+    <string name="on_boarding_title_1">Welcome</string>
+    <string name="on_boarding_description_1">You can see on the map screen the number of available bike in nearby Velib\' station. If you click on the stand button at the bottom of the screen, you will see the number of available stand in the nearby station instead.</string>
+    <string name="on_boarding_title_2">Features</string>
+    <string name="on_boarding_description_2">This application provides the following features:\n  \u2022 Nearby stations shown on the map\n  \u2022 Searchable list of all stations\n  \u2022 All informations on a specific station</string>
+    <string name="on_boarding_title_3">Warning !</string>
+    <string name="on_boarding_description_3">This is not the official app, Click &lt;a href="https://play.google.com/store/apps/details?id=com.paris.velib&amp;hl=en">here&lt;/a> for the official app</string>
+    <string name="finish_tutorial">Let\'s go!</string>
 </resources>

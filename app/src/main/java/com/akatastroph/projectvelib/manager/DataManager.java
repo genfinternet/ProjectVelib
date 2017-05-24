@@ -1,8 +1,10 @@
 package com.akatastroph.projectvelib.manager;
 
-import com.akatastroph.projectvelib.AkatastrophApplication;
 import com.akatastroph.projectvelib.model.Station;
 import com.akatastroph.projectvelib.network.ApiManager;
+import com.akatastroph.projectvelib.utils.events.Event;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,39 +21,42 @@ import rx.schedulers.Schedulers;
  */
 
 public class DataManager {
-    public interface DataStateListener {
-        void onDataReady(ArrayList<Station> stations);
-    }
-
-    public interface FilteredDataStateListener {
-        void onDataFilteredAsync(ArrayList<Station> stationsFiltered);
-    }
 
     private enum State {
+        Init,
         Loading,
         Ready,
         Error
     }
 
-    private String mQuery;
-    private ArrayList<Station> mStations;
-    private ArrayList<Station> mFilteredStations;
-
     private State mState;
-    private ArrayList<DataStateListener> mDataStateListeners;
-    private ArrayList<FilteredDataStateListener> mFilteredDataStateListeners;
     private Date mLastUpdate;
 
-    public DataManager(ApiManager apiManager) {
-        mState= State.Loading;
-        mDataStateListeners = new ArrayList<>();
-        mFilteredDataStateListeners = new ArrayList<>();
+    private ArrayList<Station> mStations;
+    private ArrayList<Station> mFilteredStations;
+    private String mQuery;
 
+    private ApiManager mApiManager;
+
+    public DataManager(ApiManager apiManager) {
         mStations = new ArrayList<>();
         mFilteredStations = new ArrayList<>();
+        mState= State.Init;
         mQuery = "";
-        AkatastrophApplication.getInstance().getAkatastrophComponent().inject(this);
-        apiManager.stationList("Paris")
+        mApiManager = apiManager;
+        updateStationList();
+    }
+
+    public boolean isReady() {
+        return mState == State.Ready;
+    }
+
+    private void updateStationList() {
+        if (mState == State.Loading) {
+            return;
+        }
+        mState= State.Loading;
+        mApiManager.stationList("Paris")
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<List<com.akatastroph.projectvelib.network.service.response.Station>>() {
@@ -61,45 +66,24 @@ public class DataManager {
 
                     @Override
                     public void onError(Throwable e) {
-                        //TODO Do something
                         mState = State.Error;
                     }
 
                     @Override
                     public void onNext(List<com.akatastroph.projectvelib.network.service.response.Station> stations) {
                         mStations = Station.fromResponse(stations);
-                        filter();
                         Collections.sort(mStations, new Station.StationComparator());
+                        filter();
                         mState = State.Ready;
-                        notifyListener();
                         mLastUpdate = Calendar.getInstance().getTime();
+                        notifyListener();
                     }
                 });
     }
 
     private void notifyListener() {
-        for (DataStateListener listener : mDataStateListeners) {
-            listener.onDataReady(mStations);
-        }
-        mDataStateListeners.clear();
-        for (FilteredDataStateListener listener : mFilteredDataStateListeners) {
-            listener.onDataFilteredAsync(mFilteredStations);
-        }
-        mFilteredDataStateListeners.clear();
-    }
-
-    public void getStationsAsync(final DataStateListener listener) {
-        if (mState == State.Ready) {
-            Runnable task = new Runnable() {
-                @Override
-                public void run() {
-                    listener.onDataReady(getStations());
-                }
-            };
-            task.run();
-        } else {
-            mDataStateListeners.add(listener);
-        }
+        EventBus.getDefault().post(new Event.StationListUpdatedEvent(mStations));
+        EventBus.getDefault().post(new Event.FilteredStationListUpdatedEvent(mFilteredStations));
     }
 
     public ArrayList<Station> getStations()  {
@@ -107,13 +91,11 @@ public class DataManager {
     }
 
 
-    public void filterAsync(FilteredDataStateListener listener, String query) {
+    public void filterAsync(String query) {
         mQuery = query.toLowerCase();
         if (mState == State.Ready) {
             filter();
-            listener.onDataFilteredAsync(mFilteredStations);
-        } else {
-            mFilteredDataStateListeners.add(listener);
+            EventBus.getDefault().post(new Event.FilteredStationListUpdatedEvent(mFilteredStations));
         }
     }
 
@@ -134,5 +116,9 @@ public class DataManager {
 
     public Date getLastUpdate() {
         return mLastUpdate;
+    }
+
+    public void refresh() {
+        updateStationList();
     }
 }

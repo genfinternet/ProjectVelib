@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.akatastroph.projectvelib.activity.StationListActivity">
@@ -25,8 +26,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="10dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         card_view:cardCornerRadius="3dp"
         card_view:layout_constraintLeft_toLeftOf="parent"
@@ -37,6 +40,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:background="@android:color/transparent"
             android:padding="0dp">
 
@@ -45,7 +50,6 @@
                 android:id="@+id/loading_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -62,24 +66,17 @@
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:hint="@string/hint_station_search"
+                    android:layout_margin="10dp"
                     android:imeOptions="actionDone"
                     android:inputType="text"
                     android:lines="1"
                     android:maxLines="1"
+                    android:nextFocusLeft="@id/search_station"
+                    android:nextFocusUp="@id/search_station"
                     android:padding="10dp"
                     android:textColor="@color/black"
                     android:textCursorDrawable="@drawable/cursor_blue"
-                    android:textSize="14sp"
-                    android:nextFocusUp="@id/search_station"
-                    android:nextFocusLeft="@id/search_station"/>
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/back_button"
-                    android:src="@drawable/ic_info"
-                    android:tint="@android:color/darker_gray" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -95,10 +92,69 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        app:backgroundTint="@color/blue_bike"
         android:src="@drawable/ic_my_location"
-        android:tint="@color/white"
+        android:tint="@color/blue_bike"
+        app:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/mode_bike_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_margin="5dp"
+            app:cardBackgroundColor="@color/blue_bike" >
+
+            <TextView
+                android:id="@+id/mode_bike_textview"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@color/transparent"
+                android:textColor="@color/white"
+                android:drawablePadding="5dp"
+                android:drawableLeft="@drawable/ic_bike_colored"
+                android:drawableStart="@drawable/ic_bike_colored"
+                android:text="@string/bikes_main" />
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/mode_stand_layout"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            app:cardBackgroundColor="@color/purple_parking" >
+
+            <TextView
+                android:id="@+id/mode_stand_textview"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@color/transparent"
+                android:textColor="@color/white"
+                android:drawablePadding="5dp"
+                android:drawableLeft="@drawable/ic_stands_colored"
+                android:drawableStart="@drawable/ic_stands_colored"
+                android:text="@string/stands_main" />
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
