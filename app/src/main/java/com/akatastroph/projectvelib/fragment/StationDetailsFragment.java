@@ -49,7 +49,25 @@ public class StationDetailsFragment extends Fragment {
 
     @OnClick(R.id.show_map)
     public void showMap() {
-        Toast.makeText(getContext(), "test show map", Toast.LENGTH_SHORT).show();
+        String uri = String.format(Locale.ENGLISH, "geo:%f,%f?z=%d&q=%f,%f (%s)", mStation.getPosition().latitude, mStation.getPosition().longitude, 16, mStation.getPosition().latitude, mStation.getPosition().longitude, mStation.getName());
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+        intent.setPackage("com.google.android.apps.maps");
+        try
+        {
+            startActivity(intent);
+        }
+        catch(ActivityNotFoundException ex)
+        {
+            try
+            {
+                Intent unrestrictedIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                startActivity(unrestrictedIntent);
+            }
+            catch(ActivityNotFoundException innerEx)
+            {
+                Toast.makeText(getContext(), "Please install a maps application", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @OnClick(R.id.show_directions)
