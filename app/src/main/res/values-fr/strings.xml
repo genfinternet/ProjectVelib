@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="address_label">Adresse</string>
+    <string name="back_button">Retour</string>
+    <string name="bike_availables_content_desc">Vélo disponibles</string>
+    <string name="bike_stands_availables_content_desc">Emplacements disponibles</string>
+    <string name="bikes_main">VÉLOS</string>
+    <string name="dialog_message">Si vous voulez voir les stations près de vous lorsque vous ouvrez la carte, pressez autoriser sur la prochaine pop-up</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_permission_denied">Vous pouvez changer ce règlages dans les paramètres plus tard.</string>
+    <string name="finish_tutorial">C\'est parti!</string>
+    <string name="hint_station_search">Rechercher une station ou une adresse</string>
+    <string name="last_update">Mis à jour le %1$s à %2$s</string>
+    <string name="on_boarding_title_1">Bienvenue</string>
+    <string name="on_boarding_title_2">Fonctionalités</string>
+    <string name="on_boarding_title_3">Attention !</string>
+    <string name="stands_main">PLACES</string>
+    <string name="station_close">FERMÉE</string>
+    <string name="station_open">OUVERTE</string>
+    <string name="status_label">État</string>
+    <string name="on_boarding_description_1">Vous pouvez voir sur l\'écran de la carte le nombre de vélos disponibles dans les stations de Velib\'s proches de vous. Si vous cliquez sur le bouton place en bas de l\'écran vous verrez le nombres de places disponibles dans ces stations.</string>
+    <string name="on_boarding_description_2">Cette application dispose des fonctionnalités suivantes :\n  \u2022 Les stations les plus proches de vous sont montrés sur la carte.\n  \u2022 Vous pouvez chercher à travers la liste de toutes les stations.\n  \u2022 Vous pouvez voir toutes les informations disponibles sur une station.</string>
+    <string name="on_boarding_description_3">Cette application n\'est pas l\'application officielle. Clique &lt;a href=\"https://play.google.com/store/apps/details?id=com.paris.velib&amp;hl=en\">içi&lt;/a> pour trouver l\'appli officielle.</string>
+    <string name="show_direction_button">Itinéraire</string>
+    <string name="show_map_button">Voir sur la carte</string>
+</resources>

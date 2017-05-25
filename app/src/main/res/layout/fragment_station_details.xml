@@ -184,7 +184,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/blue_bike"
             android:textSize="12sp"
-            android:text="See on the map" />
+            android:text="@string/show_map_button" />
 
     </LinearLayout>
 
@@ -212,7 +212,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/purple_parking"
             android:textSize="12sp"
-            android:text="Go" />
+            android:text="@string/show_direction_button" />
 
         <ImageView
             android:layout_width="0dp"
