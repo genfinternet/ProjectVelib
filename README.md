@@ -1,24 +1,6 @@
-AndroidSample
+ProjectVelib
 =============
 
-This is a very basic Android application, the goal is to provide myself (and possibly others) with a rather small project to look at, and then reuse/modify.
+Copy made from scratch of [The official velib application](https://play.google.com/store/apps/details?id=com.paris.velib&hl=fr) on Android.
 
-# Features
-- Shared Preference
-- Basic view animation
-- Toast
-
-# Features to come
-- Recycler view
-- Cards
-- I/O (internal/External)
-- Custom Toasts
-- SnackBar
-
-# Library used (or that will be used)
-- Picasso
-- Retrofit (OkHTTP)
-- Gson
-- Butterknife
-- Dagger
- 
+This project was partially made during an Android course at EPITA.
